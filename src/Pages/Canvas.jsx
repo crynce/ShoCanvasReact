@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import "../assets/css/canvas.css";
+import { URL_FOR_IMAGE_UPLOAD } from "../utility/utils";
 
 export default function Canvas() {
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
-  const URL = "https://api.cloudinary.com/v1_1/dljuam21j/image/upload";
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -83,7 +83,7 @@ export default function Canvas() {
     formData.append("file", blob);
     formData.append("upload_preset", "imgesDump");
 
-    const response = await fetch(URL, {
+    const response = await fetch(URL_FOR_IMAGE_UPLOAD, {
       method: "POST",
       body: formData,
     });
