@@ -73,6 +73,24 @@ export default function Canvas() {
       canvas.removeEventListener("touchend", stopDraw);
     };
   }, []);
+  async function submit() {
+    const canvas = canvasRef.current;
+    let blob = await new Promise((resolve) =>
+      canvas.toBlob(resolve, "image/png")
+    );
+
+    const formData = new FormData();
+    formData.append("file", blob);
+    formData.append("upload_preset", "imgesDump");
+
+    const response = await fetch(URL, {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.json();
+    console.log(result, "result");
+  }
 
   function clearCanvas() {
     const canvas = canvasRef.current;
