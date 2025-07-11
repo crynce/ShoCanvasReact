@@ -1,0 +1,166 @@
+.loginFormContainer {
+  height: 600px;
+  width: 900px;
+  border: 4px solid white;
+  box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.5);
+  display: flex;
+  position: relative;
+}
+.loginFormContainer::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%; /* starts after 10% */
+  width: 80%; /* spans 80% horizontally */
+  height: 4px; /* bar thickness */
+  background-color: white;
+  opacity: 1;
+  transition: width 0.2s ease, left 0.2s ease;
+}
+
+.loginFormContainer.animateBar::after {
+  width: 100%;
+  left: 0;
+  animation: coverAndRetract 2s cubic-bezier(0.19, 1.13, 0.84, 0.97) forwards;
+  animation-delay: 0.2s;
+}
+.leftSide {
+  width: 50%;
+  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  /* border-right: 2px solid white; */
+  position: relative;
+  /* gap: 10vh; */
+}
+.leftSide::after {
+  content: "";
+  position: absolute;
+  top: 10%; /* Start 10% down from top */
+  right: 0;
+  width: 1px; /* Border thickness */
+  height: 80%;
+  background-color: white; /* Border color */
+}
+.leftSide .WelcomeBack {
+  margin-bottom: 10vh;
+}
+.leftSide .glyphGifLoginForm {
+  width: 100%;
+  height: 20px;
+
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 10vh;
+  /* border: 2px solid white; */
+}
+.askForSignUp {
+  justify-self: flex-end;
+}
+.glyphGifLoginForm div {
+  height: 100%;
+  width: 20px;
+  background-color: whitesmoke;
+  animation: hzero 1s normal infinite;
+  /* transform-origin: center; */
+}
+
+.rightSide {
+  width: 50%;
+  height: 100%;
+  /* border-left: 2px solid white; */
+}
+.rightSide .loginForm {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  height: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.rightSide .loginForm > * {
+  width: 60%;
+  align-self: flex-start;
+  justify-content: center;
+  text-align: left;
+}
+/* .rightSide .loginForm :nth-child(2) {
+  margin-bottom: 50px;
+} */
+
+.rightSide .loginForm :nth-item(odd) {
+  align-self: flex-start;
+}
+.rightSide .loginForm input {
+  font-family: "Bitcount Grid Double", system-ui;
+  height: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rightSide .loginForm .loginFormSubmitButton {
+  margin-top: 10%;
+  width: 50%;
+  text-align: center;
+  align-self: center;
+}
+
+@media (max-width: 768px) {
+  .loginFormContainer {
+    flex-direction: column;
+    width: 90vw;
+    height: auto;
+    padding: 20px;
+  }
+
+  .leftSide {
+    display: none; /* ✅ Hide leftSide on mobile */
+  }
+
+  .rightSide {
+    width: 100%;
+    height: auto;
+    padding: 10px 0;
+  }
+
+  .rightSide .loginForm {
+    align-items: center;
+  }
+
+  .rightSide .loginForm > * {
+    width: 90%;
+    text-align: left;
+  }
+
+  .rightSide .loginForm .loginFormSubmitButton {
+    width: 70%;
+  }
+
+  .loginFormContainer::after {
+    left: 0;
+    width: 100%;
+  }
+}
+
+@keyframes hzero {
+  0% {
+    transform: rotateX(0);
+  }
+  100% {
+    transform: rotateX(180deg);
+  }
+}
+
+@keyframes coverAndRetract {
+  0% {
+    height: 4px;
+  }
+  60% {
+    height: 100%;
+  }
+
+  100% {
+    height: 4px;
+  }
+}
