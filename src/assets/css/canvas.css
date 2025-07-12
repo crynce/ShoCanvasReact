@@ -19,6 +19,15 @@ body {
 .navbarCont {
   color: white;
   background-color: black;
+  display: flex;
+  justify-content: space-between;
+  height: 10%;
+  max-height: 64px;
+  overflow: hidden;
+}
+.tagLineContainer {
+  text-align: left;
+  flex: 5;
 }
 .canvasBrandName {
   font-size: 32px;
@@ -28,6 +37,17 @@ body {
 .subscript {
   margin-left: 20ch;
   font-size: 16px;
+}
+.userProfileIconCont {
+  background-image: url("../images/iconmonstr-user-6.svg");
+  filter: invert(100%);
+  align-self: center;
+  margin-left: 10px;
+  width: 10%;
+  min-height: 40px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
 }
 
 /* loader */

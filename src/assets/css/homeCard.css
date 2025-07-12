@@ -1,0 +1,55 @@
+.homeCardContainer {
+  min-height: 85vh;
+  width: 98%;
+  margin: 16px auto;
+  border: 4px solid white;
+  box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.5);
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.homeAppItemCont {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.homeAppItemCont .canvasImages {
+  background-color: white;
+  height: 360px;
+  width: 240px;
+}
+.action-button-cont {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nothing-button {
+  background: rgba(255, 255, 255, 0.05); /* glass-like */
+  color: white;
+  border: 1px solid rgba(0, 0, 0); /* subtle thin border */
+  border-radius: 12px;
+  padding: 10px 24px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-family: "Bitcount Grid Double", monospace; /* match your font */
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px); /* optional: adds glass effect */
+}
+
+.nothing-button:hover {
+  background: rgba(255, 255, 255);
+  border-color: rgba(0, 0, 0, 0.77);
+  color: black;
+}
+
+.nothing-button:active {
+  transform: scale(0.98);
+  border-color: rgba(255, 255, 255, 0.5);
+}

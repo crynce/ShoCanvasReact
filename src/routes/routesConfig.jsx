@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import ErrorPage from "../Pages/ErrorPage";
 import Canvas from "../Pages/Canvas";
+import Home from "../Pages/Home";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +21,15 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/canvas",
+    path: "/Home/canvas",
     element: <Canvas />,
+  },
+  {
+    path: "/Home",
+    element: <Home />,
+  },
+  {
+    path: "/MyUploads",
   },
 ]);
 

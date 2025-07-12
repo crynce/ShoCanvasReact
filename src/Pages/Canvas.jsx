@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "../assets/css/canvas.css";
 import { URL_FOR_IMAGE_UPLOAD } from "../utility/utils";
+import Navbar from "../components/Navbar";
 
 export default function Canvas() {
   const canvasRef = useRef(null);
@@ -100,10 +101,7 @@ export default function Canvas() {
 
   return (
     <div className="app-container">
-      <nav className="navbarCont">
-        <h1 className="canvasBrandName">Sho-Canvas</h1>
-        <sub className="subscript">Draw anyThing</sub>
-      </nav>
+      <Navbar />
       <canvas
         ref={canvasRef}
         id="canvasPlayground"
