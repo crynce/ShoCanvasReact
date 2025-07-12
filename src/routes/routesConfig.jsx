@@ -3,6 +3,7 @@ import App from "../App";
 import ErrorPage from "../Pages/ErrorPage";
 import Canvas from "../Pages/Canvas";
 import Home from "../Pages/Home";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -22,11 +23,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/Home/canvas",
-    element: <Canvas />,
+    element: (
+      <ProtectedRoute>
+        <Canvas />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/Home",
-    element: <Home />,
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/MyUploads",

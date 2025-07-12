@@ -19,7 +19,8 @@ const auth = getAuth(app);
 
 const addNewUser = createAsyncThunk(
   "signupFormReducer/addNewUser",
-  async (signupCreds, thunkAPI) => {
+  async ({ signupCreds, navigate }, thunkAPI) => {
+    console.log(signupCreds, "signupCreds");
     try {
       // 1. Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
@@ -28,6 +29,7 @@ const addNewUser = createAsyncThunk(
         signupCreds.Password
       );
       const user = userCredential.user;
+      console.log(userCredential, "userCredential");
 
       // 2. Save user data to Firestore (optional)
       const docRef = await setDoc(doc(db, "Users", user.uid), {
@@ -53,7 +55,7 @@ const addNewUser = createAsyncThunk(
 );
 const logInUserHandler = createAsyncThunk(
   "signupFormReducer/logInUserHandler",
-  async (signupCreds, thunkAPI) => {
+  async ({ signupCreds, navigate }, thunkAPI) => {
     console.log("this also called");
     try {
       // 1. Create user in Firebase Authentication
@@ -82,6 +84,7 @@ const logInUserHandler = createAsyncThunk(
         docRef.id,
         user.accessToken
       );
+      navigate("/Home");
 
       return {
         emailID: signupCreds.EmailID,
