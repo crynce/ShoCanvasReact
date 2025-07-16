@@ -21,9 +21,8 @@ body {
   background-color: black;
   display: flex;
   justify-content: space-between;
-  height: 10%;
+  height: 200px;
   max-height: 64px;
-  overflow: hidden;
 }
 .tagLineContainer {
   text-align: left;
@@ -48,6 +47,43 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
+  z-index: 9999999999;
+  overflow: visible;
+  position: relative;
+}
+
+.quickActionsNavbar {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: black;
+  /* color: red; */
+  list-style: none;
+  padding: 0.5rem 0;
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  min-width: 140px;
+  z-index: 9999999999;
+}
+
+.userProfileIconCont:hover .quickActionsNavbar {
+  display: block;
+}
+
+.navbarSignout {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 16px;
+  transition: background 0.2s ease;
+  color: white;
+}
+
+.navbarSignout:hover {
+  background-color: #f2f2f2;
+  color: black;
 }
 
 /* loader */

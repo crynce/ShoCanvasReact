@@ -35,6 +35,7 @@ const addNewUser = createAsyncThunk(
       const docRef = await setDoc(doc(db, "Users", user.uid), {
         email: signupCreds.EmailID,
         createdAt: new Date().toISOString(),
+        allUploadsURL: [],
       });
 
       //   console.log(
@@ -47,6 +48,7 @@ const addNewUser = createAsyncThunk(
         emailID: signupCreds.EmailID,
         docRefId: docRef?.id,
         uid: user.uid,
+        allUploadsURL: [],
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error Creating User: " + error.message);
@@ -70,26 +72,23 @@ const logInUserHandler = createAsyncThunk(
       const docRef = doc(db, "Users", user.uid);
       const userDataSnapshot = await getDoc(docRef);
       console.log(userDataSnapshot, "userDataSnapshot");
+      const data = userDataSnapshot?.data();
       if (userDataSnapshot.exists()) {
-        const data = userDataSnapshot.data();
-        console.log("current Data:" + data);
+        console.log("current Data:" + data.email);
         await updateDoc(docRef, {
           loggedInAt: new Date().toISOString(),
         });
       } else {
         throw new Error("No such user available");
       }
-      console.log(
-        "User created and document written with ID:",
-        docRef.id,
-        user.accessToken
-      );
+      console.log("User Logged in:", docRef.id, user.accessToken);
       navigate("/Home");
 
       return {
         emailID: signupCreds.EmailID,
         docRefId: docRef?.id,
         uid: user.uid,
+        allUploadsURL: data.allUploadsURL,
       };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error Creating User: " + error.message);
@@ -99,7 +98,7 @@ const logInUserHandler = createAsyncThunk(
 
 const signupFormReducer = createSlice({
   name: "signupFormReducer",
-  initialState: { email: "", userId: "" },
+  initialState: { email: "", userId: "", allUploadsURL: [] },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(addNewUser.fulfilled, (state, action) => {
@@ -110,6 +109,7 @@ const signupFormReducer = createSlice({
       console.log("Request rejected" + action.payload);
     });
     builder.addCase(logInUserHandler.fulfilled, (state, action) => {
+      console.log("this worked");
       console.log(action.payload, "retrievedData");
     });
   },

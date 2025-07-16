@@ -2,10 +2,14 @@ import React, { useEffect, useRef } from "react";
 import "../assets/css/canvas.css";
 import { URL_FOR_IMAGE_UPLOAD } from "../utility/utils";
 import Navbar from "../components/Navbar";
+import { useDispatch, useSelector } from "react-redux";
+import { pushLinkToFirebase, setUploadImgData } from "../store/uploadReducer";
 
 export default function Canvas() {
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
+  const dispatch = useDispatch();
+  const userUID = useSelector((state) => state.authUserData.uid);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -91,6 +95,11 @@ export default function Canvas() {
 
     const result = await response.json();
     console.log(result, "result");
+    const { public_id, secure_url, asset_id } = result;
+    dispatch(
+      pushLinkToFirebase({ public_id, secure_url, asset_id, uid: userUID })
+    );
+    // dispatch(setUploadImgData({ public_id, secure_url, asset_id }));
   }
 
   function clearCanvas() {
