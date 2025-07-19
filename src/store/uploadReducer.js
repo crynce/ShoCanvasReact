@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { app, db } from "../utility/fireConfig";
-import { getAuth } from "firebase/auth";
 
 const pushLinkToFirebase = createAsyncThunk(
   "uploadReducer/pushLinkToFirebase",
@@ -11,24 +10,31 @@ const pushLinkToFirebase = createAsyncThunk(
       console.log(data, "pushImageLink");
       const docRef = doc(db, "Users", data.uid);
       console.log("Users", data.uid);
-      console.log([...thunkAPI.getState()?.uploadsData?.allUploadsURL]);
-      const allUploadsURL = [
-        ...thunkAPI.getState()?.uploadsData?.allUploadsURL,
-      ];
-      console.log(allUploadsURL, "allUploadsURL");
-      allUploadsURL.push({
-        [data.asset_id]: {
+      await updateDoc(docRef, {
+        allUploadsURL: arrayUnion({
+          [data.asset_id]: {
+            public_id: data.public_id,
+            secure_id: data.secure_url,
+            asset_id: data.asset_id,
+            createdAt: new Date().toISOString(),
+          },
+        }),
+      });
+      console.log(
+        {
           public_id: data.public_id,
           secure_id: data.secure_url,
           asset_id: data.asset_id,
           createdAt: new Date().toISOString(),
         },
-      });
-
-      await updateDoc(docRef, {
-        allUploadsURL: allUploadsURL,
-      });
-      return allUploadsURL;
+        "authSLice"
+      );
+      return {
+        public_id: data.public_id,
+        secure_id: data.secure_url,
+        asset_id: data.asset_id,
+        createdAt: new Date().toISOString(),
+      };
     } catch (err) {
       console.log(err, "err");
       throw Error(`Upload Failed: ${err.message || err.status}`);
@@ -44,19 +50,37 @@ const uploadReducer = createSlice({
   },
 
   reducers: {
-    setUploadImgData: (state, action) => {
-      console.log("data received");
-      state.currUploadData = action.payload;
+    updateUploadData: (state, action) => {
+      console.log(action.payload, "data received");
+
+      const currUploadData = {
+        [action.payload.asset_id]: {
+          public_id: action.payload.public_id,
+          secure_id: action.payload.secure_url,
+          asset_id: action.payload.asset_id,
+          createdAt: new Date().toISOString(),
+        },
+      };
+
+      console.log(
+        currUploadData,
+        "currUploadData",
+        JSON.parse(JSON.stringify(state))
+      );
+      state.allUploadsURL = [...state.allUploadsURL, currUploadData];
     },
   },
   extraReducers: (builder) => {
     builder.addCase(pushLinkToFirebase.fulfilled, (state, action) => {
-      state.allUploadsURL = action.payload.allUploadsURL;
+      state.allUploadsURL = [
+        ...state.allUploadsURL,
+        { [action.payload.asset_id]: action.payload },
+      ];
       console.log("successful");
     });
   },
 });
 export default uploadReducer.reducer;
-export const { setUploadImgData } = uploadReducer.actions;
+export const { updateUploadData } = uploadReducer.actions;
 
 export { pushLinkToFirebase };

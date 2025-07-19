@@ -5,6 +5,7 @@ import { clearAuthState } from "../store/authReducer";
 
 export default function Navbar() {
   const dispatch = useDispatch();
+  console.log("navbar");
   function handleLogout() {
     const auth = getAuth();
 

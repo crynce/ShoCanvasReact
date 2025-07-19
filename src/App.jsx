@@ -3,26 +3,22 @@ import "./App.css";
 import LoginForm from "./components/LoginForm/LoginForm";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuthState } from "./store/authReducer";
-import { useNavigate } from "react-router-dom";
+import { fetchInitialData, setAuthState } from "./store/authReducer";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // const location = useLocation();
   useEffect(() => {
     const auth = getAuth();
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log(user, "user still loggedIn");
-        dispatch(
-          setAuthState({
-            email: user.email,
-            uid: user.uid,
-            name: user.displayName,
-          })
-        );
+        await dispatch(fetchInitialData(user.uid));
         navigate("/Home");
+        console.log("useEffect");
+        // }
       } else {
         console.log("user Logged out");
       }
@@ -31,7 +27,7 @@ function App() {
       console.log("preinted");
       unsubscribe();
     };
-  });
+  }, []);
   return (
     <>
       <LoginForm />

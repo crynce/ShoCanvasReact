@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "../../assets/css/loginForm.css";
 export default function LoginForm() {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -16,9 +16,11 @@ export default function LoginForm() {
   const [formName, setFormName] = useState("LoginForm");
   const containerRef = useRef(null);
   function onSubmit(data) {
-    console.log(data, formName, "data");
-    formName == "SignupForm" && dispatch(addNewUser({signupCreds:data, navigate}));
-    formName == "LoginForm" && dispatch(logInUserHandler({signupCreds:data, navigate}));
+    // console.log(data, formName, "data");
+    formName == "SignupForm" &&
+      dispatch(addNewUser({ signupCreds: data, navigate }));
+    formName == "LoginForm" &&
+      dispatch(logInUserHandler({ signupCreds: data, navigate }));
   }
   function handleAnimation() {
     if (containerRef.current) {
@@ -36,8 +38,8 @@ export default function LoginForm() {
       }, 2200);
     }
   }
-  console.log(watch("EmailID"));
-  console.log(errors);
+  // console.log(watch("EmailID"));
+  // console.log(errors);
   return (
     <div ref={containerRef} className="loginFormContainer">
       <div className="leftSide">

@@ -14,6 +14,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { fetchInitialData } from "./authReducer";
 
 const auth = getAuth(app);
 
@@ -29,7 +30,7 @@ const addNewUser = createAsyncThunk(
         signupCreds.Password
       );
       const user = userCredential.user;
-      console.log(userCredential, "userCredential");
+      console.log(userCredential.user.uid, "userCredential");
 
       // 2. Save user data to Firestore (optional)
       const docRef = await setDoc(doc(db, "Users", user.uid), {
@@ -61,35 +62,16 @@ const logInUserHandler = createAsyncThunk(
     console.log("this also called");
     try {
       // 1. Create user in Firebase Authentication
+      signInWithEmailAndPassword;
       const userCredential = await signInWithEmailAndPassword(
         auth,
         signupCreds.EmailID,
         signupCreds.Password
       );
       const user = userCredential.user;
-      //   getting snapshot of already present data
-      console.log(db, "Users", user.uid);
-      const docRef = doc(db, "Users", user.uid);
-      const userDataSnapshot = await getDoc(docRef);
-      console.log(userDataSnapshot, "userDataSnapshot");
-      const data = userDataSnapshot?.data();
-      if (userDataSnapshot.exists()) {
-        console.log("current Data:" + data.email);
-        await updateDoc(docRef, {
-          loggedInAt: new Date().toISOString(),
-        });
-      } else {
-        throw new Error("No such user available");
-      }
-      console.log("User Logged in:", docRef.id, user.accessToken);
+      console.log(user, "userCredShoz");
+      thunkAPI.dispatch(fetchInitialData(user.uid));
       navigate("/Home");
-
-      return {
-        emailID: signupCreds.EmailID,
-        docRefId: docRef?.id,
-        uid: user.uid,
-        allUploadsURL: data.allUploadsURL,
-      };
     } catch (error) {
       return thunkAPI.rejectWithValue("Error Creating User: " + error.message);
     }

@@ -20,6 +20,11 @@
   background-color: white;
   height: 360px;
   width: 240px;
+  transition: transform 0.2s ease;
+}
+.homeAppItemCont .canvasImages:hover {
+  transform: scale(1.2);
+  cursor: pointer;
 }
 .action-button-cont {
   margin-top: 20px;
