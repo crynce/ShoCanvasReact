@@ -89,8 +89,8 @@ export default function LoginForm() {
           {
             <p className="mobileFormChangerText">
               {formName == "LoginForm"
-                ? "Don't have an account"
-                : "Already have an account"}
+                ? "Don't have an account? "
+                : "Already have an account? "}
               <span className="mobileFormChanger" onClick={handleAnimation}>
                 {formName === "LoginForm" ? "Sign Up" : "Log In"}
               </span>
