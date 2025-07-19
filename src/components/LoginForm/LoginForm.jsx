@@ -86,6 +86,17 @@ export default function LoginForm() {
           />
           {errors.password && <p style={{ color: "white" }}>Required</p>}
 
+          {
+            <p className="mobileFormChangerText">
+              {formName == "LoginForm"
+                ? "Don't have an account"
+                : "Already have an account"}
+              <span className="mobileFormChanger" onClick={handleAnimation}>
+                {formName === "LoginForm" ? "Sign Up" : "Log In"}
+              </span>
+            </p>
+          }
+
           <button className="loginFormSubmitButton" type="submit">
             {formName == "LoginForm" ? "Log In" : "Sign In"}
           </button>
