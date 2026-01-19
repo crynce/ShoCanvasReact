@@ -2,11 +2,11 @@ import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewUser, logInUserHandler } from "../../store/signupReducer";
-import { useNavigate } from "react-router-dom";
 import "../../assets/css/loginForm.css";
 export default function LoginForm() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const signupDetails = useSelector((state) => state.signupFormData);
+  console.log(signupDetails, "signupDetails");
   const {
     register,
     handleSubmit,
@@ -16,11 +16,9 @@ export default function LoginForm() {
   const [formName, setFormName] = useState("LoginForm");
   const containerRef = useRef(null);
   function onSubmit(data) {
-    // console.log(data, formName, "data");
-    formName == "SignupForm" &&
-      dispatch(addNewUser({ signupCreds: data, navigate }));
-    formName == "LoginForm" &&
-      dispatch(logInUserHandler({ signupCreds: data, navigate }));
+    console.log(data, "data");
+    formName == "SignupForm" && dispatch(addNewUser(data));
+    formName == "LoginForm" && dispatch(logInUserHandler(data));
   }
   function handleAnimation() {
     if (containerRef.current) {
@@ -38,8 +36,8 @@ export default function LoginForm() {
       }, 2200);
     }
   }
-  // console.log(watch("EmailID"));
-  // console.log(errors);
+  console.log(watch("EmailID"));
+  console.log(errors);
   return (
     <div ref={containerRef} className="loginFormContainer">
       <div className="leftSide">
@@ -85,17 +83,6 @@ export default function LoginForm() {
             type="password"
           />
           {errors.password && <p style={{ color: "white" }}>Required</p>}
-
-          {
-            <p className="mobileFormChangerText">
-              {formName == "LoginForm"
-                ? "Don't have an account? "
-                : "Already have an account? "}
-              <span className="mobileFormChanger" onClick={handleAnimation}>
-                {formName === "LoginForm" ? "Sign Up" : "Log In"}
-              </span>
-            </p>
-          }
 
           <button className="loginFormSubmitButton" type="submit">
             {formName == "LoginForm" ? "Log In" : "Sign In"}
