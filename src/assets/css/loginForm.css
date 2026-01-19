@@ -15,7 +15,9 @@
   height: 4px; /* bar thickness */
   background-color: white;
   opacity: 1;
-  transition: width 0.2s ease, left 0.2s ease;
+  transition:
+    width 0.2s ease,
+    left 0.2s ease;
 }
 
 .loginFormContainer.animateBar::after {
@@ -89,6 +91,13 @@
   margin-bottom: 50px;
 } */
 
+.loginForm .mobileFormChangerText {
+  display: none;
+}
+.loginForm .mobileFormChanger {
+  border-bottom: 1px solid white;
+  cursor: pointer;
+}
 .rightSide .loginForm :nth-item(odd) {
   align-self: flex-start;
 }
@@ -100,7 +109,7 @@
 }
 
 .rightSide .loginForm .loginFormSubmitButton {
-  margin-top: 10%;
+  margin-top: 4%;
   width: 50%;
   text-align: center;
   align-self: center;
@@ -133,8 +142,14 @@
     text-align: left;
   }
 
+  .loginForm .mobileFormChangerText {
+    display: block;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 20px;
+  }
   .rightSide .loginForm .loginFormSubmitButton {
-    width: 70%;
+    width: 50%;
   }
 
   .loginFormContainer::after {
