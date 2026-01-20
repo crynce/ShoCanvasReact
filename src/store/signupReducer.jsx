@@ -55,6 +55,7 @@ const logInUserHandler = createAsyncThunk(
         signupCreds.Password,
       );
       const user = userCredential.user;
+      console.log(user, "user");
       //   getting snapshot of already present data
       const docRef = doc(db, "Users", user.uid);
       const userDataSnapshot = await getDoc(docRef);
