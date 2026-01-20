@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-import "../assets/css/home.css";
 import HomeCard from "../components/HomeCard";
 import { useNavigationLoading } from "../hooks/useNavigationLoading";
 
@@ -8,7 +7,7 @@ export default function Home() {
   useNavigationLoading();
 
   return (
-    <div className="homeContainer">
+    <div className="box-border max-h-screen w-full">
       <Navbar />
       <HomeCard />
     </div>

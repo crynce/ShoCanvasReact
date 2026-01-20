@@ -6,8 +6,12 @@ export default function ThumbnailComp({ srcURL }) {
     (state) => state.authUserData.allUploadsURL,
   );
   return (
-    <div className="thumbnailCompCont">
-      <img src={srcURL} alt="" className="canvasImages" />
+    <div>
+      <img
+        src={srcURL}
+        alt=""
+        className="h-52 w-52 object-contain object-center rounded-lg transition-transform duration-200 hover:scale-105 hover:cursor-pointer"
+      />
     </div>
   );
 }

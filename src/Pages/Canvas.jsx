@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import "../assets/css/canvas.css";
 import { URL_FOR_IMAGE_UPLOAD } from "../utility/utils";
 import Navbar from "../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -147,21 +146,30 @@ export default function Canvas() {
   }
 
   return (
-    <div className="app-container">
+    <div className="h-screen">
       <Navbar />
       <canvas
         ref={canvasRef}
         id="canvasPlayground"
-        className="canvasPlayground"
+        className="block bg-blue-100 w-full touch-none"
       ></canvas>
-      <div className="action-button-cont">
-        <button className="nothing-button" onClick={submit}>
+      <div className="flex justify-around items-center gap-4 p-5">
+        <button
+          className="px-6 py-2 bg-white/5 text-black border border-black rounded-3xl font-bitcount tracking-wider uppercase text-base transition-all duration-200 hover:bg-white hover:border-black/77 active:scale-95"
+          onClick={submit}
+        >
           Submit
         </button>
-        <button className="nothing-button" onClick={galleryNavHandler}>
+        <button
+          className="px-6 py-2 bg-white/5 text-black border border-black rounded-3xl font-bitcount tracking-wider uppercase text-base transition-all duration-200 hover:bg-white hover:border-black/77 active:scale-95"
+          onClick={galleryNavHandler}
+        >
           back to Home
         </button>
-        <button className="nothing-button" onClick={clearCanvas}>
+        <button
+          className="px-6 py-2 bg-white/5 text-black border border-black rounded-3xl font-bitcount tracking-wider uppercase text-base transition-all duration-200 hover:bg-white hover:border-black/77 active:scale-95"
+          onClick={clearCanvas}
+        >
           Clear Canvas
         </button>
       </div>
