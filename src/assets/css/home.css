@@ -1,5 +1,5 @@
 .homeContainer {
   box-sizing: border-box;
   max-height: 100vh;
-  width: 100vw;
+  width: 100%;
 }

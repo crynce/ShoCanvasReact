@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { logInUserHandler } from "./signupReducer";
+import { logInUserHandler, addNewUser } from "./signupReducer";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../utility/fireConfig";
 import { pushLinkToFirebase } from "./uploadReducer";
@@ -21,7 +21,7 @@ const fetchInitialData = createAsyncThunk(
     } catch (err) {
       console.log(err);
     }
-  }
+  },
 );
 const authReducer = createSlice({
   name: "authReducer",
@@ -40,11 +40,20 @@ const authReducer = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(addNewUser.fulfilled, (state, action) => {
+      state.email = action.payload.emailID;
+      state.uid = action.payload.uid;
+      state.name = "authenticated";
+      console.log(
+        state,
+        action.payload,
+        "printed in auth reducer signup fulfilled",
+      );
+    });
     builder.addCase(logInUserHandler.fulfilled, (state, action) => {
-      //   state.email = action.payload.email;
-      //   state.uid = action.payload.uid;
-      //   state.name = action.payload.name;
-      //   state.allUploadsURL = action.payload.allUploadsURL;
+      state.email = action.payload.emailID;
+      state.uid = action.payload.uid;
+      state.name = "authenticated";
       console.log(state, action.payload, "printed in auth reducer fulfilled");
     });
     builder.addCase(logInUserHandler.pending, (state, action) => {
@@ -55,7 +64,7 @@ const authReducer = createSlice({
         state.email,
         action.payload,
         "state",
-        "printed in auth reducer"
+        "printed in auth reducer",
       );
     });
     builder.addCase(pushLinkToFirebase.fulfilled, (state, action) => {
@@ -70,8 +79,8 @@ const authReducer = createSlice({
     builder.addCase(fetchInitialData.fulfilled, (state, action) => {
       console.log(action.payload, "fetchInitialData");
       state.email = action.payload.data.email;
-      (state.uid = action.payload.uid),
-        (state.allUploadsURL = action.payload.data.allUploadsURL);
+      ((state.uid = action.payload.uid),
+        (state.allUploadsURL = action.payload.data.allUploadsURL));
     });
     builder.addCase(fetchInitialData.rejected, (state, action) => {
       console.log(action.payload, "fetching failed");

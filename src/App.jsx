@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <LoginForm />
       </div>
     </>

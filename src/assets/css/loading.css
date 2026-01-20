@@ -1,0 +1,61 @@
+.loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.loadingAnimation {
+  width: 100px;
+  height: 30px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.loadingSquare {
+  height: 100%;
+  width: 20px;
+  background-color: whitesmoke;
+  animation: hzero 1s normal infinite;
+  border-radius: 2px;
+}
+
+.loadingSquare:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loadingSquare:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.loadingMessage {
+  color: white;
+  font-size: 16px;
+  font-family: "Bitcount Grid Double", system-ui;
+  text-align: center;
+  margin: 0;
+}
+
+@keyframes hzero {
+  0% {
+    transform: rotateX(0);
+  }
+  100% {
+    transform: rotateX(180deg);
+  }
+}

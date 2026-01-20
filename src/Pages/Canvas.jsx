@@ -5,38 +5,50 @@ import Navbar from "../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { pushLinkToFirebase, updateUploadData } from "../store/uploadReducer";
 import { useNavigate } from "react-router-dom";
+import { useNavigationLoading } from "../hooks/useNavigationLoading";
+import { startLoading, stopLoading } from "../store/loadingReducer";
+import { authStorage } from "../utility/authStorage";
 
 export default function Canvas() {
+  useNavigationLoading();
+
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userUID = useSelector((state) => state.authUserData.uid);
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    // Resize canvas
+    // Resize canvas - set both CSS and drawing surface size
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - 200;
+
+    // Set canvas CSS size to match
+    canvas.style.display = "block";
+    canvas.style.touchAction = "none"; // Prevent default touch behavior
 
     ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
+    ctx.lineJoin = "round";
 
     const getPos = (e) => {
       const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+
+      let x, y;
+
       if (e.touches) {
-        return {
-          x: e.touches[0].clientX - rect.left,
-          y: e.touches[0].clientY - rect.top,
-        };
+        x = (e.touches[0].clientX - rect.left) * scaleX;
+        y = (e.touches[0].clientY - rect.top) * scaleY;
       } else {
-        return {
-          x: e.offsetX,
-          y: e.offsetY,
-        };
+        x = (e.clientX - rect.left) * scaleX;
+        y = (e.clientY - rect.top) * scaleY;
       }
+
+      return { x, y };
     };
 
     const startDraw = (e) => {
@@ -56,34 +68,49 @@ export default function Canvas() {
 
     const stopDraw = () => {
       drawingRef.current = false;
+      ctx.closePath();
     };
 
     // Mouse events
     canvas.addEventListener("mousedown", startDraw);
     canvas.addEventListener("mousemove", draw);
     canvas.addEventListener("mouseup", stopDraw);
+    canvas.addEventListener("mouseout", stopDraw);
 
     // Touch events
     canvas.addEventListener("touchstart", startDraw);
     canvas.addEventListener("touchmove", draw);
     canvas.addEventListener("touchend", stopDraw);
 
+    // Handle window resize
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 200;
+    };
+
+    window.addEventListener("resize", handleResize);
+
     // Cleanup
     return () => {
       canvas.removeEventListener("mousedown", startDraw);
       canvas.removeEventListener("mousemove", draw);
       canvas.removeEventListener("mouseup", stopDraw);
+      canvas.removeEventListener("mouseout", stopDraw);
 
       canvas.removeEventListener("touchstart", startDraw);
       canvas.removeEventListener("touchmove", draw);
       canvas.removeEventListener("touchend", stopDraw);
+
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
   async function submit() {
     const canvas = canvasRef.current;
     try {
+      dispatch(startLoading("Uploading your artwork..."));
+
       let blob = await new Promise((resolve) =>
-        canvas.toBlob(resolve, "image/png")
+        canvas.toBlob(resolve, "image/png"),
       );
 
       const formData = new FormData();
@@ -96,20 +123,18 @@ export default function Canvas() {
       });
 
       const result = await response.json();
-      // console.log(result, "result");
       const { public_id, secure_url, asset_id } = result;
 
-      // dispatch(updateUploadData({ public_id, secure_url, asset_id }));
+      const userUID = authStorage.getUID();
       dispatch(
-        pushLinkToFirebase({ public_id, secure_url, asset_id, uid: userUID })
+        pushLinkToFirebase({ public_id, secure_url, asset_id, uid: userUID }),
       );
+      dispatch(stopLoading());
       clearCanvas();
     } catch (err) {
       console.log(err, "error in uploading");
+      dispatch(stopLoading());
     }
-    // dispatch(
-    //   pushLinkToFirebase({ public_id, secure_url, asset_id, uid: userUID })
-    // );
   }
 
   function clearCanvas() {

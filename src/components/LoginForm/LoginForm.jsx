@@ -1,10 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { addNewUser, logInUserHandler } from "../../store/signupReducer";
+import { authStorage } from "../../utility/authStorage";
 import "../../assets/css/loginForm.css";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "./utility/firebaseConfig";
 export default function LoginForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const signupDetails = useSelector((state) => state.signupFormData);
   console.log(signupDetails, "signupDetails");
   const {
@@ -17,8 +22,21 @@ export default function LoginForm() {
   const containerRef = useRef(null);
   function onSubmit(data) {
     console.log(data, "data");
-    formName == "SignupForm" && dispatch(addNewUser(data));
-    formName == "LoginForm" && dispatch(logInUserHandler(data));
+    if (formName == "SignupForm") {
+      dispatch(addNewUser(data)).then((result) => {
+        if (result.type === "signupFormReducer/addNewUser/fulfilled") {
+          authStorage.saveUID(result.payload.uid);
+        }
+      });
+    } else if (formName == "LoginForm") {
+      dispatch(logInUserHandler(data)).then((result) => {
+        if (result.type === "signupFormReducer/logInUserHandler/fulfilled") {
+          authStorage.saveUID(result.payload.uid);
+          console.log("ran");
+          navigate("/Home");
+        }
+      });
+    }
   }
   function handleAnimation() {
     if (containerRef.current) {
@@ -38,6 +56,17 @@ export default function LoginForm() {
   }
   console.log(watch("EmailID"));
   console.log(errors);
+
+  //already logged in
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(getAuth(app), (user) => {
+      const uid = user?.uid;
+      // uid && navigate("/Home");
+    });
+
+    return () => unsubscribe();
+  }, []);
   return (
     <div ref={containerRef} className="loginFormContainer">
       <div className="leftSide">

@@ -18,12 +18,15 @@
 }
 .homeAppItemCont .canvasImages {
   background-color: white;
-  height: 360px;
-  width: 240px;
+  height: 200px;
+  width: 200px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 8px;
   transition: transform 0.2s ease;
 }
 .homeAppItemCont .canvasImages:hover {
-  transform: scale(1.2);
+  transform: scale(1.05);
   cursor: pointer;
 }
 .action-button-cont {

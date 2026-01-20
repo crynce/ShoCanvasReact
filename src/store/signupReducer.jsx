@@ -1,12 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  collection,
-  addDoc,
-  setDoc,
-  doc,
-  updateDoc,
-  getDoc,
-} from "firebase/firestore";
+import { setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db, app } from "../components/LoginForm/utility/firebaseConfig";
 //creating user With Email
 import {
@@ -14,18 +7,20 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { startLoading, stopLoading } from "./loadingReducer";
 
 const auth = getAuth(app);
 
 const addNewUser = createAsyncThunk(
   "signupFormReducer/addNewUser",
   async (signupCreds, thunkAPI) => {
+    thunkAPI.dispatch(startLoading("Creating your account..."));
     try {
       // 1. Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         signupCreds.EmailID,
-        signupCreds.Password
+        signupCreds.Password,
       );
       const user = userCredential.user;
 
@@ -35,11 +30,7 @@ const addNewUser = createAsyncThunk(
         createdAt: new Date().toISOString(),
       });
 
-      //   console.log(
-      //     "User created and document written with ID:",
-      //     docRef.id,
-      //     user.accessToken
-      //   );
+      thunkAPI.dispatch(stopLoading());
 
       return {
         emailID: signupCreds.EmailID,
@@ -47,41 +38,36 @@ const addNewUser = createAsyncThunk(
         uid: user.uid,
       };
     } catch (error) {
+      thunkAPI.dispatch(stopLoading());
       return thunkAPI.rejectWithValue("Error Creating User: " + error.message);
     }
-  }
+  },
 );
 const logInUserHandler = createAsyncThunk(
   "signupFormReducer/logInUserHandler",
   async (signupCreds, thunkAPI) => {
-    console.log("this also called");
+    thunkAPI.dispatch(startLoading("Logging you in..."));
     try {
       // 1. Create user in Firebase Authentication
       const userCredential = await signInWithEmailAndPassword(
         auth,
         signupCreds.EmailID,
-        signupCreds.Password
+        signupCreds.Password,
       );
       const user = userCredential.user;
       //   getting snapshot of already present data
-      console.log(db, "Users", user.uid);
       const docRef = doc(db, "Users", user.uid);
       const userDataSnapshot = await getDoc(docRef);
-      console.log(userDataSnapshot, "userDataSnapshot");
       if (userDataSnapshot.exists()) {
         const data = userDataSnapshot.data();
-        console.log("current Data:" + data);
         await updateDoc(docRef, {
           loggedInAt: new Date().toISOString(),
         });
       } else {
         throw new Error("No such user available");
       }
-      console.log(
-        "User created and document written with ID:",
-        docRef.id,
-        user.accessToken
-      );
+
+      thunkAPI.dispatch(stopLoading());
 
       return {
         emailID: signupCreds.EmailID,
@@ -89,9 +75,10 @@ const logInUserHandler = createAsyncThunk(
         uid: user.uid,
       };
     } catch (error) {
+      thunkAPI.dispatch(stopLoading());
       return thunkAPI.rejectWithValue("Error Creating User: " + error.message);
     }
-  }
+  },
 );
 
 const signupFormReducer = createSlice({
@@ -100,14 +87,15 @@ const signupFormReducer = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(addNewUser.fulfilled, (state, action) => {
-      (state.email = action.payload.emailID),
-        (state.userId = action.payload.uid);
+      ((state.email = action.payload.emailID),
+        (state.userId = action.payload.uid));
     });
     builder.addCase(addNewUser.rejected, (state, action) => {
       console.log("Request rejected" + action.payload);
     });
     builder.addCase(logInUserHandler.fulfilled, (state, action) => {
-      console.log(action.payload, "retrievedData");
+      state.userId = action.payload.uid;
+      state.email = action.payload.emailID;
     });
   },
 });

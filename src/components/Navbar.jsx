@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import "../assets/css/canvas.css";
 import { getAuth, signOut } from "firebase/auth";
 import { clearAuthState } from "../store/authReducer";
+import { authStorage } from "../utility/authStorage";
 
 export default function Navbar() {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ export default function Navbar() {
 
     signOut(auth)
       .then(() => {
+        authStorage.clearStorage(); // Clear UID from storage
         dispatch(clearAuthState());
         console.log("user signout successfully");
       })

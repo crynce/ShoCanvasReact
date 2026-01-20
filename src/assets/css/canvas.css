@@ -108,6 +108,8 @@ body {
 .canvasPlayground {
   display: block;
   background-color: aliceblue;
+  width: 100%;
+  margin-top: 10px;
 }
 
 .action-button-cont {
