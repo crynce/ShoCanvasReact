@@ -6,9 +6,8 @@ import ThumbnailComp from "./ThumbnailComp";
 export default function HomeCard() {
   const navigate = useNavigate();
   const userDataImages = useSelector(
-    (state) => state.authUserData.allUploadsURL
+    (state) => state.authUserData.allUploadsURL,
   );
-  console.log(userDataImages, "userDataImages");
   function goToCanvas() {
     navigate("/Home/canvas");
   }

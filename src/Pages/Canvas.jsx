@@ -132,7 +132,6 @@ export default function Canvas() {
       dispatch(stopLoading());
       clearCanvas();
     } catch (err) {
-      console.log(err, "error in uploading");
       dispatch(stopLoading());
     }
   }

@@ -6,7 +6,6 @@ import { useNavigationLoading } from "../hooks/useNavigationLoading";
 
 export default function Home() {
   useNavigationLoading();
-  console.log("ran");
 
   return (
     <div className="homeContainer">

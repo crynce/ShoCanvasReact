@@ -90,9 +90,7 @@ const signupFormReducer = createSlice({
       ((state.email = action.payload.emailID),
         (state.userId = action.payload.uid));
     });
-    builder.addCase(addNewUser.rejected, (state, action) => {
-      console.log("Request rejected" + action.payload);
-    });
+    builder.addCase(addNewUser.rejected, (state, action) => {});
     builder.addCase(logInUserHandler.fulfilled, (state, action) => {
       state.userId = action.payload.uid;
       state.email = action.payload.emailID;
