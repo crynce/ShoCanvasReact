@@ -57,8 +57,8 @@ export default function LoginForm() {
         [&.animateBar]:after:w-full [&.animateBar]:after:left-0 [&.animateBar]:after:animate-coverAndRetract"
     >
       <div
-        className="w-1/2 flex flex-col justify-around relative
-        after:absolute after:top-[10%] after:right-0 after:w-px after:h-[80%] after:bg-white"
+        className="w-1/2 flex flex-col justify-around align-center relative text-center
+        after:absolute after:top-[10%] after:right-0 after:w-px after:h-[80%] after:bg-white left-sidebar"
       >
         <h2 className="mb-10 text-2xl font-bold text-white font-bitcount">
           {formName == "LoginForm" ? "Welcome Back !" : "Draw Anything"}
